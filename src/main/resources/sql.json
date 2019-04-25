@@ -1,0 +1,40 @@
+[{
+	"name": "rpt_credit_by_age",
+	"querySql": "select 
+ cast(date_format(to_date(date_add(CURRENT_TIMESTAMP(), -1)), 'yyyyMMdd') as bigint) stat_dt  
+ , age 
+ , count(1) entry_cnt  
+ , count(case when c.credit_status = '0' then 1 else null end) calculate_cnt  
+ , count(case when c.credit_status = '1' then 1 else null end) audit_passed_cnt  
+ , count(case when c.credit_status = '2' then 1 else null end) refused_cnt  
+ , count(case when c.credit_status = '3' then 1 else null end) auditing_cnt  
+ , count(case when c.credit_status = '4' then 1 else null end) frozen_cnt  
+ , count(case when c.credit_status in ('1','2') then 1 else null end) audited_cnt  
+ , count(case when (c.credit_status = '2' and (locate('系统自动拒绝', c.remark) > 0 or locate('准入规则判断总闸口', c.remark) > 0)) then 1 else null end) sys_refused_cnt  
+ , count(case when c.credit_status in ('0','3', '4') or c.credit_status is null then 1 else null end) other_cnt  
+ , sum(case when c.credit_status in ('1', '4') then c.credit_amt else 0 end) credit_amt  
+ , sum(case when c.credit_status in ('1') then c.credit_amt else 0 end) credit_suc_amt  
+ from (select *, (case when cert_Id is null or LENGTH(cert_Id) != 18 or cert_Id = '' or cert_Id = 'null' then -1 else year(to_date(date_add(CURRENT_TIMESTAMP(), -1))) - cast(SUBSTR(cert_Id, 7, 4) as int) end) as age from nds_dw.dim_customer_credit) c  
+ group by age",
+	"deleteSql": "delete from rpt_credit_by_age where stat_dt = date_format(date_sub(now(), interval 1 day), '%Y%m%d')",
+	"insertSql": "insert into rpt_credit_by_age values(?,?,?,?,?,?,?,?,?,?,?,?,?)"
+},{
+	"name": "rpt_credit_by_time",
+	"querySql": "select 
+ cast(date_format(to_date(date_add(CURRENT_TIMESTAMP(), -1)), 'yyyyMMdd') as bigint) stat_dt  
+ , count(1) entry_cnt  
+ , count(case when c.credit_status = '0' then 1 else null end) calculate_cnt  
+ , count(case when c.credit_status = '1' then 1 else null end) audit_passed_cnt  
+ , count(case when c.credit_status = '2' then 1 else null end) refused_cnt  
+ , count(case when c.credit_status = '3' then 1 else null end) auditing_cnt  
+ , count(case when c.credit_status = '4' then 1 else null end) frozen_cnt  
+ , count(case when c.credit_status in ('1','2') then 1 else null end) audited_cnt  
+ , count(case when (c.credit_status = '2' and (locate('系统自动拒绝', c.remark) > 0 or locate('准入规则判断总闸口', c.remark) > 0)) then 1 else null end) sys_refused_cnt  
+ , count(case when c.credit_status in ('0','3', '4') or c.credit_status is null then 1 else null end) other_cnt  
+ , sum(case when c.credit_status in ('1', '4') then c.credit_amt else 0 end) credit_amt  
+ , sum(case when c.credit_status in ('1') then c.credit_amt else 0 end) credit_suc_amt  
+ from (select *, (case when cert_Id is null or LENGTH(cert_Id) != 18 or cert_Id = '' or cert_Id = 'null' then -1 else year(to_date(date_add(CURRENT_TIMESTAMP(), -1))) - cast(SUBSTR(cert_Id, 7, 4) as int) end) as age from nds_dw.dim_customer_credit) c ",
+	"deleteSql": "delete from rpt_credit_by_time where stat_dt = date_format(date_sub(now(), interval 1 day), '%Y%m%d')",
+	"insertSql": "insert into rpt_credit_by_time values(?,?,?,?,?,?,?,?,?,?,?,?)"
+}
+]
