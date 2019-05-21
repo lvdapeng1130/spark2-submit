@@ -45,7 +45,13 @@
 			<version>${spark.version}</version>
 		</dependency>
 		
-		
+		<dependency>
+			<groupId>com.hncy58</groupId>
+			<artifactId>scala-dbscan</artifactId>
+			<version>0.0.1</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/scala-0.0.1-SNAPSHOT.jar</systemPath>
+		</dependency>
 		
 		<dependency>
 			<groupId>org.apache.spark</groupId>
@@ -54,33 +60,11 @@
 		</dependency>
 		
 		<dependency>
-			<groupId>org.apache.spark</groupId>
-			<artifactId>spark-hive_${scala.version}</artifactId>
-			<version>${spark.version}</version>
+			<groupId>org.apache.kudu</groupId>
+			<artifactId>kudu-spark2_${scala.version}</artifactId>
+			<version>${kudu.version}-${cdh.version}</version>
 		</dependency>
 		
-		<!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
-		<dependency>
-			<groupId>com.alibaba</groupId>
-			<artifactId>fastjson</artifactId>
-			<version>1.2.54</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-pool2</artifactId>
-			<version>${commons.pool2.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-dbcp2</artifactId>
-			<version>${commons.dbcp2.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>${mysql.version}</version>
-			<scope>compile</scope>
-		</dependency>
 	</dependencies>
 
 	<repositories>
@@ -107,6 +91,10 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
+				<configuration>
+					<!-- 将maven系统库范围依赖一并打入springboot工程 -->
+					<includeSystemScope>true</includeSystemScope>
+				</configuration>
 				<executions>
 					<execution>
 						<id>copy-dependencies</id>
