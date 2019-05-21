@@ -16,11 +16,8 @@
 		<hbase.version>2.0.0</hbase.version>
 		<kudu.version>1.6.0</kudu.version>
 		<spark.version>2.2.0-cdh6.0.1</spark.version>
-		
-		<mysql.version>5.1.38</mysql.version>
-		<commons.pool2.version>2.4.2</commons.pool2.version>
-		<commons.dbcp2.version>2.5.0</commons.dbcp2.version>
 		<scala.version>2.11</scala.version>
+		
 		<junit.version>4.12</junit.version>
 		<JAVA_HOME></JAVA_HOME>
 	</properties>
@@ -87,12 +84,12 @@
 
 	<build>
 		<plugins>
-		
+			<!-- 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
 				<configuration>
-					<!-- 将maven系统库范围依赖一并打入springboot工程 -->
+					将maven系统库范围依赖一并打入springboot工程
 					<includeSystemScope>true</includeSystemScope>
 				</configuration>
 				<executions>
@@ -108,8 +105,8 @@
 					</execution>
 				</executions>
 			</plugin>
+			 -->
 			 
-			<!-- 
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<configuration>
@@ -121,6 +118,8 @@
 							<mainClass>com.hncy58.spark2_kudu.KuduApp</mainClass>
 						</manifest>
 					</archive>
+					<!-- 将maven系统库范围依赖一并打入springboot工程 -->
+					<includeSystemScope>true</includeSystemScope>
 				</configuration>
 				<executions>
 					<execution>
@@ -132,7 +131,6 @@
 					</execution>
 				</executions>
 			</plugin>
-			-->
 		</plugins>
 	</build>
 </project>
